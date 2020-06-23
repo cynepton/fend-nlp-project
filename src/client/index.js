@@ -7,9 +7,10 @@ import './styles/sass/footer.scss'
 import './styles/sass/form.scss'
 import './styles/sass/header.scss'
 
-console.log(checkForName);
+// console.log(checkForName);
 
 alert("I EXIST")
 export {
-    handleSubmit
+    handleSubmit,
+    checkForName
 }
