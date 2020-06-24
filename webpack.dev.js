@@ -5,13 +5,16 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
     entry: './src/client/index.js',
-    output: {
+    mode: 'development',
+    stats: 'verbose',
+    devtool: 'source-map',
+    output:{
         libraryTarget: 'var',
         library: 'Client'
     },
-    mode: 'development',
-    devtool: 'source-map',
-    stats: 'verbose',
+    devServer: {
+        port: 8081,
+    },
     module: {
         rules: [
             {
@@ -22,7 +25,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
-            },
+            }
         ]
     },
     plugins: [
