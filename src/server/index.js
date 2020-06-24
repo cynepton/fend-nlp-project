@@ -1,8 +1,13 @@
-var path = require('path')
-const express = require('express')
-const mockAPIResponse = require('./mockAPI.js')
 const dotenv = require('dotenv');
 dotenv.config();
+
+var path = require('path')
+
+const express = require('express')
+const bodyParser =  require('body-parser')
+const cors = require("cors")
+
+const mockAPIResponse = require('./mockAPI.js')
 
 var AYLIENTextAPI = require('aylien_textapi');
 var textapi = new AYLIENTextAPI({
@@ -12,7 +17,10 @@ var textapi = new AYLIENTextAPI({
 
 const app = express()
 
-app.use(express.static('dist'))
+app.use(express.static('dist'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(cors());
 
 console.log(__dirname)
 
@@ -22,10 +30,34 @@ app.get('/', function (req, res) {
 })
 
 // designates what port the app will listen to for incoming requests
-app.listen(8080, function () {
-    console.log('Example app listening on port 8080!')
+app.listen(3000, function () {
+    console.log('Example app listening on port 3000!')
 })
 
 app.get('/test', function (req, res) {
     res.send(mockAPIResponse)
 })
+
+let articleContent = {};
+app.post("/data", function (req, res) {
+    textapi.sentiment(
+      {
+        url: req.body.test,
+      },
+      (error, response) => {
+        if (error == null) {
+          articleContent = {
+            text: response.text,
+            polarity: response.polarity,
+            subjectivity: response.subjectivity,
+            polarity_confidence: response.polarity_confidence,
+            subjectivity_confidence: response.subjectivity_confidence,
+          };
+          res.send(articleContent);
+          console.log(articleContent);
+        } else {
+          console.log("Error", error);
+        }
+      }
+    );
+  });
