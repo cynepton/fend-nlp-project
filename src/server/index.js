@@ -1,20 +1,12 @@
-const dotenv = require('dotenv');
+const dotenv = require('dotenv')
 dotenv.config();
 
 var path = require('path')
-
 const express = require('express')
 const bodyParser =  require('body-parser')
-const cors = require("cors")
-
 const mockAPIResponse = require('./mockAPI.js')
-
-var AYLIENTextAPI = require('aylien_textapi');
-var textapi = new AYLIENTextAPI({
-  application_id: process.env.API_ID,
-  application_key: process.env.API_KEY
-});
-
+const cors = require("cors")
+var aylien = require('aylien_textapi')
 const app = express()
 
 app.use(express.static('dist'));
@@ -22,6 +14,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
 
+var textapi = new aylien({
+  application_id: process.env.API_ID,
+  application_key: process.env.API_KEY,
+});
+
+console.log(`Your API ID is ${process.env.API_ID}`);
+console.log(`Your API KEY is ${process.env.API_KEY}`);
 console.log(__dirname)
 
 app.get('/', function (req, res) {
@@ -30,8 +29,8 @@ app.get('/', function (req, res) {
 })
 
 // designates what port the app will listen to for incoming requests
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!')
+app.listen(8081, function () {
+    console.log('Example app listening on port 8081!')
 })
 
 app.get('/test', function (req, res) {
@@ -61,3 +60,4 @@ app.post("/data", function (req, res) {
       }
     );
   });
+
